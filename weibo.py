@@ -62,6 +62,7 @@ class Weibo(object):
         self.got_count = 0  # 存储爬取到的微博数
         self.weibo = []  # 存储爬取到的所有微博信息
         self.weibo_id_list = []  # 存储爬取到的所有微博id
+        self.weibo_all = []
 
     def validate_config(self, config):
         """验证配置是否正确"""
@@ -533,6 +534,7 @@ class Weibo(object):
         print(u'评论数：%d' % weibo['comments_count'])
         print(u'转发数：%d' % weibo['reposts_count'])
         print(u'话题：%s' % weibo['topics'])
+        print(u'原始数据：%s' % weibo['origin_data'])
         print(u'@用户：%s' % weibo['at_users'])
         print(u'url：https://m.weibo.cn/detail/%d' % weibo['id'])
 
@@ -581,6 +583,7 @@ class Weibo(object):
                     weibo = self.parse_weibo(weibo_info)
             weibo['created_at'] = self.standardize_date(
                 weibo_info['created_at'])
+            weibo['origin_data'] = info
             return weibo
         except Exception as e:
             print("Error: ", e)
@@ -601,6 +604,7 @@ class Weibo(object):
             js = self.get_weibo_json(page)
             if js['ok']:
                 weibos = js['data']['cards']
+                self.weibo_all.extend(weibos)
                 for w in weibos:
                     if w['card_type'] == 9:
                         wb = self.get_one_weibo(w)
@@ -695,8 +699,8 @@ class Weibo(object):
     def get_result_headers(self):
         """获取要写入结果文件的表头"""
         result_headers = [
-            'id', 'bid', '正文', '原始图片url', '视频url', '位置', '日期', '工具', '点赞数',
-            '评论数', '转发数', '话题', '@用户'
+            'id', 'bid', '正文', '正文链接', '原始图片url', '视频url', '位置', '日期', '工具', '点赞数',
+            '评论数', '转发数', '话题', '@用户', '原始数据'
         ]
         if not self.filter:
             result_headers2 = ['是否原创', '源用户id', '源用户昵称']
@@ -766,6 +770,12 @@ class Weibo(object):
             json.dump(data, f, ensure_ascii=False)
         print(u'%d条微博写入json文件完毕,保存路径:' % self.got_count)
         print(path)
+
+    def write_all(self, data):
+        """写入最后结果"""
+        path = self.get_filepath('txt')
+        with codecs.open(path, 'w', encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False)
 
     def info_to_mongodb(self, collection, info_list):
         """将爬取的信息写入MongoDB数据库"""
@@ -989,6 +999,7 @@ class Weibo(object):
 
             self.write_data(wrote_count)  # 将剩余不足20页的微博写入文件
         print(u'微博爬取完成，共爬取%d条微博' % self.got_count)
+        # self.write_all(self.weibo_all)
 
     def get_user_config_list(self, file_path):
         """获取文件中的微博id信息"""
