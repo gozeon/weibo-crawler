@@ -785,8 +785,11 @@ class Weibo(object):
             sys.exit(u'系统中可能没有安装pymongo库，请先运行 pip install pymongo ，再运行程序')
         try:
             from pymongo import MongoClient
-
-            client = MongoClient()
+            mongo_url = os.environ.get('MONGO_URL')
+            if mongo_url is None:
+                mongo_url = 'mongodb://localhost:27017/'
+            print('mongo url: %s' % mongo_url)
+            client = MongoClient(mongo_url)
             db = client['weibo']
             collection = db[collection]
             if len(self.write_mode) > 1:
