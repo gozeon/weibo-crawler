@@ -12,7 +12,7 @@ import sys
 import traceback
 from collections import OrderedDict
 from datetime import date, datetime, timedelta
-from time import sleep
+from time import sleep, strftime, strptime
 
 import requests
 from lxml import etree
@@ -445,6 +445,12 @@ class Weibo(object):
         elif created_at.count('-') == 1:
             year = datetime.now().strftime("%Y")
             created_at = year + "-" + created_at
+        else:
+            # https://www.codenong.com/10494312/
+            # 微博更改时间 "Tue Dec 29 17:51:23 +0800 2020"
+            created_at = strftime("%Y-%m-%d", strptime(created_at,"%a %b %d %H:%M:%S %z %Y"))
+        
+        print(created_at)
         return created_at
 
     def standardize_info(self, weibo):
