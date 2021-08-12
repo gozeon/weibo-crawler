@@ -10,7 +10,8 @@ python weibo.py
 ```bash
 go install
 go build
-./main &
+# https://stackoverflow.com/questions/12486691/how-do-i-get-my-golang-web-server-to-run-in-the-background/
+nohup ./main &
 ```
 
 # 开机启动
