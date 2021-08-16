@@ -1,5 +1,7 @@
 fork: [https://github.com/dataabc/weibo-crawler](https://github.com/dataabc/weibo-crawler)
 
+![](crawler.png)
+
 # install 
 ```bash
 pip install -r requirements.txt
