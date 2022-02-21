@@ -152,7 +152,7 @@ class Weibo(object):
                 screen_name varchar(30),
                 gender varchar(10),
                 statuses_count INT,
-                followers_count INT,
+                followers_count varchar(20),
                 follow_count INT,
                 registration_time varchar(20),
                 sunshine varchar(20),
@@ -519,7 +519,7 @@ class Weibo(object):
         print(u'阳光信用：%s' % self.user['sunshine'])
         print(u'注册时间：%s' % self.user['registration_time'])
         print(u'微博数：%d' % self.user['statuses_count'])
-        print(u'粉丝数：%d' % self.user['followers_count'])
+        print(u'粉丝数：%s' % self.user['followers_count'])
         print(u'关注数：%d' % self.user['follow_count'])
         print(u'url：https://m.weibo.cn/profile/%s' % self.user['id'])
         if self.user.get('verified_reason'):

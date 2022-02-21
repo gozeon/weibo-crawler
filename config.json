@@ -2,7 +2,7 @@
     "user_id_list": ["1715118170"],
     "filter": 1,
     "since_date": 2,
-    "write_mode": ["csv", "mongo"],
+    "write_mode": ["csv"],
     "original_pic_download": 0,
     "retweet_pic_download": 0,
     "original_video_download": 0,
