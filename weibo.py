@@ -597,6 +597,7 @@ class Weibo(object):
 
     def is_pinned_weibo(self, info):
         """判断微博是否为置顶微博"""
+        """现在已经没有置顶文案了"""
         weibo_info = info['mblog']
         title = weibo_info.get('title')
         if title and title.get('text') == u'置顶':
@@ -622,7 +623,7 @@ class Weibo(object):
                             since_date = datetime.strptime(
                                 self.user_config['since_date'], '%Y-%m-%d')
                             if created_at < since_date:
-                                if self.is_pinned_weibo(w):
+                                if self.is_pinned_weibo(w) or page < 2:
                                     continue
                                 else:
                                     print(u'{}已获取{}({})的第{}页微博{}'.format(
